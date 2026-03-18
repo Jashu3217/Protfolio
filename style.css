@@ -768,3 +768,48 @@ footer a { color: var(--accent); text-decoration: none; }
   .hero-stats { gap: 2rem; }
   footer { flex-direction: column; gap: 0.5rem; text-align: center; }
 }
+
+.hero-impact {
+  max-width: 600px;
+  margin: 20px 0;
+  color: #9fb3c8;
+  font-size: 15px;
+}
+
+.hero-sub {
+  margin-bottom: 20px;
+  color: #00e5ff;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-resume {
+  border: 1px solid #00e5ff;
+  padding: 6px 12px;
+  color: #00e5ff;
+  text-decoration: none;
+}
+
+.about-highlights p {
+  margin: 6px 0;
+  color: #00e5ff;
+}
+
+.exp-summary {
+  color: #00e5ff;
+  margin-bottom: 10px;
+}
+
+.project {
+  margin-bottom: 20px;
+}
+
+.links a {
+  margin-right: 10px;
+  color: #00e5ff;
+}
