@@ -5,7 +5,635 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jaswanth Chelemilla — SDE-2</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080c10;
+    --surface: #0e1318;
+    --surface2: #141b22;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --text: #e8edf2;
+    --muted: #6b7a8d;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,12,16,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.5rem 1.2rem;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 7rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 6rem;
+    max-width: 100%;
+    padding-left: 8vw;
+    padding-right: 8vw;
+  }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 2rem;
+  }
+
+  .hero-name { color: var(--text); }
+  .hero-role {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(0,229,255,0.5);
+  }
+
+  .hero-desc {
+    max-width: 520px;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.9;
+    margin-bottom: 3rem;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.8rem 2rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    padding: 0.8rem 2rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { border-color: var(--text); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-tag {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(0,229,255,0.3);
+    padding: 4px 10px;
+    flex-shrink: 0;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-avatar {
+    aspect-ratio: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-initials {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 800;
+    color: rgba(0,229,255,0.15);
+    letter-spacing: -0.05em;
+    user-select: none;
+  }
+
+  .about-avatar-accent {
+    position: absolute;
+    bottom: -2px; right: -2px;
+    width: 40%; height: 40%;
+    border-top: 2px solid var(--accent);
+    border-left: 2px solid var(--accent);
+  }
+
+  .about-content p {
+    color: var(--muted);
+    font-size: 13.5px;
+    margin-bottom: 1.5rem;
+    line-height: 1.9;
+  }
+
+  .about-content p strong { color: var(--text); font-weight: 500; }
+
+  .about-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .detail-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .detail-value { font-size: 13px; color: var(--text); }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.8rem;
+    transition: border-color 0.2s;
+  }
+
+  .skill-card:hover { border-color: rgba(0,229,255,0.3); }
+
+  .skill-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .skill-icon {
+    width: 30px; height: 30px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+
+  .skill-cat {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 2rem; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 2rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 7px;
+    width: 7px; height: 7px;
+    background: var(--accent);
+    transform: translateX(-3px);
+  }
+
+  .timeline-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .timeline-period { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+  .timeline-company { font-size: 11px; letter-spacing: 0.08em; color: var(--muted); }
+
+  .timeline-role {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.8rem;
+  }
+
+  .timeline-bullets { list-style: none; padding: 0; }
+
+  .timeline-bullets li {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+    padding: 0.25rem 0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .timeline-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(0,229,255,0.4);
+    font-size: 10px;
+    top: 5px;
+  }
+
+  .timeline-tags { margin-top: 1rem; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* PROJECTS */
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .project-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-3px); }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 60px; height: 60px;
+    background: radial-gradient(circle at top right, rgba(0,229,255,0.08), transparent);
+  }
+
+  .project-num { font-size: 10px; letter-spacing: 0.15em; color: rgba(0,229,255,0.4); margin-bottom: 1rem; }
+
+  .project-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.02em;
+  }
+
+  .project-desc { font-size: 12.5px; color: var(--muted); line-height: 1.8; margin-bottom: 1.2rem; }
+
+  .project-bullets { list-style: none; margin-bottom: 1.2rem; }
+
+  .project-bullets li {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.8;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .project-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: rgba(0,229,255,0.4);
+    font-size: 10px;
+    top: 4px;
+  }
+
+  .project-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-link {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .project-link:hover { opacity: 0.7; }
+
+  /* BLOG */
+  .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+
+  .blog-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.8rem;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .blog-card:hover { border-color: rgba(124,58,237,0.4); }
+
+  .blog-date { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 0.8rem; }
+
+  .blog-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.7rem;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .blog-excerpt { font-size: 12.5px; color: var(--muted); line-height: 1.7; margin-bottom: 1.2rem; }
+  .blog-read { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7c3aed; }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start; }
+
+  .contact-info h3 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .contact-info p { color: var(--muted); font-size: 13px; line-height: 1.8; margin-bottom: 2rem; }
+
+  .contact-links { display: flex; flex-direction: column; gap: 0.8rem; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .contact-link:hover { color: var(--accent); }
+
+  .contact-link-icon {
+    width: 28px; height: 28px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-group label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+
+  .form-group input,
+  .form-group textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 300;
+    padding: 0.8rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--accent); }
+
+  .form-group textarea { height: 130px; }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up { animation: fadeUp 0.7s ease both; }
+  .fade-up:nth-child(2) { animation-delay: 0.1s; }
+  .fade-up:nth-child(3) { animation-delay: 0.2s; }
+  .fade-up:nth-child(4) { animation-delay: 0.3s; }
+
+  .blink { display: inline-block; animation: blink 1s step-end infinite; color: var(--accent); }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    #hero { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hero-stats { gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
 </head>
 <body>
 
@@ -92,7 +720,7 @@
         </div>
         <div class="detail-item">
           <div class="detail-label">Status</div>
-          <div class="detail-value highlight">Open to work</div>
+          <div class="detail-value" style="color:var(--accent);">Open to work</div>
         </div>
       </div>
     </div>
@@ -204,21 +832,15 @@
       </div>
       <div class="timeline-role">Software Development Engineer - 2</div>
       <ul class="timeline-bullets">
-        <li>Architected a Team-Based Contest System supporting <strong>12K+ concurrent users</strong>, using Redis-based distributed locking to ensure 0% submission collisions.</li>
-        <li>Engineered an auto-scaling Judge Microservice that increased throughput by <strong>30%</strong> and reduced infrastructure cost by <strong>45%</strong> through worker autoscaling.</li>
-        <li>Built and optimized a Placement Portal processing <strong>7K+ applications in 2 weeks</strong>, maintaining sub-150ms API latency under heavy traffic.</li>
-        <li>Developed a high-performance Leaderboard Service using Redis Sorted Sets, improving ranking computation time by <strong>5×</strong>.</li>
-        <li>Refactored registration workflows, caching layers, and error-handling logic, improving user success rate from <strong>82% → 97%</strong>.</li>
-        <li>Automated scraping pipelines (LeetCode, Codeforces, CodeChef) and CI/CD workflows via GitHub Actions, improving analytics availability for <strong>6+ colleges</strong>.</li>
+        <li>Architected a Team-Based Contest System supporting <strong style="color:var(--text)">12K+ concurrent users</strong>, using Redis-based distributed locking to ensure 0% submission collisions.</li>
+        <li>Engineered an auto-scaling Judge Microservice that increased throughput by <strong style="color:var(--text)">30%</strong> and reduced infrastructure cost by <strong style="color:var(--text)">45%</strong> through worker autoscaling.</li>
+        <li>Built and optimized a Placement Portal processing <strong style="color:var(--text)">7K+ applications in 2 weeks</strong>, maintaining sub-150ms API latency under heavy traffic.</li>
+        <li>Developed a high-performance Leaderboard Service using Redis Sorted Sets, improving ranking computation time by <strong style="color:var(--text)">5×</strong>.</li>
+        <li>Refactored registration workflows, caching layers, and error-handling logic, improving user success rate from <strong style="color:var(--text)">82% → 97%</strong>.</li>
+        <li>Automated scraping pipelines (LeetCode, Codeforces, CodeChef) and CI/CD workflows via GitHub Actions, improving analytics availability for <strong style="color:var(--text)">6+ colleges</strong>.</li>
       </ul>
       <div class="timeline-tags">
-        <span class="tag">Node.js</span>
-        <span class="tag">TypeScript</span>
-        <span class="tag">Angular</span>
-        <span class="tag">Redis</span>
-        <span class="tag">MongoDB</span>
-        <span class="tag">AWS</span>
-        <span class="tag">Docker</span>
+        <span class="tag">Node.js</span><span class="tag">TypeScript</span><span class="tag">Angular</span><span class="tag">Redis</span><span class="tag">MongoDB</span><span class="tag">AWS</span><span class="tag">Docker</span>
       </div>
     </div>
   </div>
@@ -244,9 +866,7 @@
         <li>Assisted in migrating database scripts to align with updated compliance requirements, maintaining system integrity during release cycles.</li>
       </ul>
       <div class="timeline-tags">
-        <span class="tag">PL/SQL</span>
-        <span class="tag">Oracle DB</span>
-        <span class="tag">Banking Systems</span>
+        <span class="tag">PL/SQL</span><span class="tag">Oracle DB</span><span class="tag">Banking Systems</span>
       </div>
     </div>
     <div class="timeline-item">
@@ -256,15 +876,12 @@
       </div>
       <div class="timeline-role">Pen Testing Intern</div>
       <ul class="timeline-bullets">
-        <li>Performed web application penetration testing using Burp Suite and OWASP ZAP, identifying <strong>15+ security vulnerabilities</strong>.</li>
+        <li>Performed web application penetration testing using Burp Suite and OWASP ZAP, identifying <strong style="color:var(--text)">15+ security vulnerabilities</strong>.</li>
         <li>Documented reproduction steps and remediation guidelines to improve application security posture.</li>
         <li>Reviewed authentication workflows to uncover misconfigurations, contributing to risk mitigation strategies aligned with industry security frameworks.</li>
       </ul>
       <div class="timeline-tags">
-        <span class="tag">Burp Suite</span>
-        <span class="tag">OWASP ZAP</span>
-        <span class="tag">Pen Testing</span>
-        <span class="tag">API Security</span>
+        <span class="tag">Burp Suite</span><span class="tag">OWASP ZAP</span><span class="tag">Pen Testing</span><span class="tag">API Security</span>
       </div>
     </div>
   </div>
@@ -277,63 +894,54 @@
     <h2>Projects</h2>
     <div class="section-line"></div>
   </div>
-  <div class="projects-grid">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem;">
     <div class="project-card">
       <div class="project-num">PROJECT / 01</div>
       <div class="project-title">Secure Product Data Storage & Decoder</div>
       <ul class="project-bullets">
-        <li>Engineered secure product data storage using <strong>Argon2 hashing</strong> and blockchain integration, strengthening data integrity and compliance.</li>
-        <li>Integrated <strong>multi-factor authentication</strong> and granular access controls, safeguarding sensitive product information.</li>
-        <li>Built a debugging utility to decode, analyze, and validate encoded user input, reducing internal investigation time by <strong>40%</strong>.</li>
+        <li>Engineered secure product data storage using <strong style="color:var(--text)">Argon2 hashing</strong> and blockchain integration, strengthening data integrity and compliance.</li>
+        <li>Integrated <strong style="color:var(--text)">multi-factor authentication</strong> and granular access controls, safeguarding sensitive product information.</li>
+        <li>Built a debugging utility to decode, analyze, and validate encoded user input, reducing internal investigation time by <strong style="color:var(--text)">40%</strong>.</li>
         <li>Formulated an automated alert system to detect anomalous access patterns and proactively mitigate security threats.</li>
       </ul>
-      <div class="timeline-tags mb">
-        <span class="tag">Argon2</span>
-        <span class="tag">Blockchain</span>
-        <span class="tag">MFA</span>
-        <span class="tag">Security</span>
+      <div class="timeline-tags" style="margin-bottom:1.2rem;">
+        <span class="tag">Argon2</span><span class="tag">Blockchain</span><span class="tag">MFA</span><span class="tag">Security</span>
       </div>
       <div class="project-footer">
         <div></div>
-        <span class="project-type">Security / Backend</span>
+        <span style="font-size:11px;color:var(--muted);">Security / Backend</span>
       </div>
     </div>
     <div class="project-card">
       <div class="project-num">PROJECT / 02</div>
       <div class="project-title">Team-Based Contest System</div>
       <ul class="project-bullets">
-        <li>Architected to support <strong>12K+ concurrent users</strong> with zero submission collisions using Redis distributed locking.</li>
-        <li>Implemented real-time leaderboards with Redis Sorted Sets — <strong>5× faster</strong> ranking computation.</li>
+        <li>Architected to support <strong style="color:var(--text)">12K+ concurrent users</strong> with zero submission collisions using Redis distributed locking.</li>
+        <li>Implemented real-time leaderboards with Redis Sorted Sets — <strong style="color:var(--text)">5× faster</strong> ranking computation.</li>
         <li>Designed fault-tolerant submission pipeline with retry mechanisms and observability via CloudWatch.</li>
       </ul>
-      <div class="timeline-tags mb">
-        <span class="tag">Node.js</span>
-        <span class="tag">Redis</span>
-        <span class="tag">MongoDB</span>
-        <span class="tag">AWS</span>
+      <div class="timeline-tags" style="margin-bottom:1.2rem;">
+        <span class="tag">Node.js</span><span class="tag">Redis</span><span class="tag">MongoDB</span><span class="tag">AWS</span>
       </div>
       <div class="project-footer">
         <div></div>
-        <span class="project-type">Distributed Systems</span>
+        <span style="font-size:11px;color:var(--muted);">Distributed Systems</span>
       </div>
     </div>
     <div class="project-card">
       <div class="project-num">PROJECT / 03</div>
       <div class="project-title">Auto-Scaling Judge Microservice</div>
       <ul class="project-bullets">
-        <li>Engineered worker autoscaling that increased code judging throughput by <strong>30%</strong>.</li>
-        <li>Reduced infrastructure cost by <strong>45%</strong> by dynamically scaling workers based on queue depth.</li>
+        <li>Engineered worker autoscaling that increased code judging throughput by <strong style="color:var(--text)">30%</strong>.</li>
+        <li>Reduced infrastructure cost by <strong style="color:var(--text)">45%</strong> by dynamically scaling workers based on queue depth.</li>
         <li>Integrated with CI/CD via GitHub Actions for automated deployments and health monitoring.</li>
       </ul>
-      <div class="timeline-tags mb">
-        <span class="tag">Microservices</span>
-        <span class="tag">Docker</span>
-        <span class="tag">AWS Lambda</span>
-        <span class="tag">GitHub Actions</span>
+      <div class="timeline-tags" style="margin-bottom:1.2rem;">
+        <span class="tag">Microservices</span><span class="tag">Docker</span><span class="tag">AWS Lambda</span><span class="tag">GitHub Actions</span>
       </div>
       <div class="project-footer">
         <div></div>
-        <span class="project-type">Cloud / DevOps</span>
+        <span style="font-size:11px;color:var(--muted);">Cloud / DevOps</span>
       </div>
     </div>
   </div>
@@ -401,16 +1009,16 @@
     <div>
       <div class="contact-form">
         <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" id="name" placeholder="Your name">
+          <label>Name</label>
+          <input type="text" placeholder="Your name">
         </div>
         <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="you@company.com">
+          <label>Email</label>
+          <input type="email" placeholder="you@company.com">
         </div>
         <div class="form-group">
-          <label for="message">Message</label>
-          <textarea id="message" placeholder="Tell me about the role or project..."></textarea>
+          <label>Message</label>
+          <textarea placeholder="Tell me about the role or project..."></textarea>
         </div>
         <a href="mailto:jaswanthiare45@gmail.com" class="btn-primary" style="text-align:center;">Send message</a>
       </div>
@@ -423,6 +1031,35 @@
   <span>Hyderabad, India — Open to remote roles</span>
 </footer>
 
-<script src="js/main.js"></script>
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.project-card, .skill-card, .blog-card, .timeline-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(18px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
 </body>
 </html>
